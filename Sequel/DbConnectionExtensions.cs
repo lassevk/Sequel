@@ -8,6 +8,13 @@ namespace Sequel
     [PublicAPI]
     public static class DbConnectionExtensions
     {
+        [PublicAPI, NotNull]
+        public static IDbConnection OpenNow([NotNull] this IDbConnection connection)
+        {
+            connection.Open();
+            return connection;
+        }
+
         [PublicAPI]
         public static int Execute([NotNull] this IDbConnection connection, [NotNull] string sql, [CanBeNull] object parameters = null)
         {
