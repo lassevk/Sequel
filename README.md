@@ -25,5 +25,34 @@ The methods in the list above executes directly, returning the results. The `Pre
 the reflection work that can be done up front is cached and reused. These are meant to be used in a context where
 you intend to execute the same statements over and over again, potentially with different parameter values.
 
+# Specifying parameters
+
+Specifying parameters is done using a wrapper object instead of an array of some parameter object.
+
+You basically wrap up the parameter values in an object with properties where the names and types and current values
+of the properties are used to add parameters to the command.
+
+See the example below for what this looks like.
+
+# Example of usage with SQLite
+
+    using (var connection = new SQLiteConnection(@"Data Source=D:\Temp\Test.sqlite3"))
+    {
+        connection.Open();
+        using (var transaction = connection.BeginTransaction())
+        {
+            transaction.Execute("delete from some_table where key = @key", new { key = 42 });
+            transaction.Execute("insert into some_table (key, value) values (@key, @value)", new {
+                key = "mol",
+                value = 42
+            });
+            var records = transaction.QueryAnonymous("select * from some_table", new { key = "dummy", value = 0 });
+            if (records.Any(r => r.value == 42))
+                Debug.WriteLine("SUCCESS!");
+            transaction.Commit();
+        }
+    }
+
   [idbc]: https://msdn.microsoft.com/en-us/library/system.data.idbconnection%28v=vs.110%29.aspx
   [idbt]: https://msdn.microsoft.com/en-us/library/system.data.idbtransaction%28v=vs.110%29.aspx
+  [idbp]: https://github.com/lassevk/Sequel/blob/master/Sequel/IDbPreparedCommand.cs
