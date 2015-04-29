@@ -12,6 +12,27 @@ namespace Sequel
     [PublicAPI]
     public static class DbConnectionExtensions
     {
+        /// <summary>
+        /// Opens the <see cref="IDbConnection"/> and returns it, meant to simplify <code>using (...) { ... }</code>
+        /// constructs.
+        /// </summary>
+        /// <param name="connection">
+        /// The <see cref="IDbConnection"/> to open.
+        /// </param>
+        /// <returns>
+        /// The opened <paramref name="connection"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para><paramref name="connection"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <example><code>
+        ///     using (var connection = new SQLiteConnection("...").OpenNow())
+        ///     using (var transaction = connection.BeginTransaction())
+        ///     {
+        ///         transaction.Execute("DELETE FROM some_table");
+        ///         transaction.Commit();
+        ///     }
+        /// </code></example>
         [PublicAPI, NotNull]
         public static IDbConnection OpenNow([NotNull] this IDbConnection connection)
         {
