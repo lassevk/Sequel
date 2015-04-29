@@ -12,6 +12,13 @@ namespace Sequel
     [PublicAPI]
     public static class DbConnectionExtensions
     {
+        [PublicAPI, NotNull]
+        public static IDbConnection OpenNow([NotNull] this IDbConnection connection)
+        {
+            connection.Open();
+            return connection;
+        }
+
         /// <summary>
         /// Executes the specified SQL statement, with optional parameters.
         /// </summary>
