@@ -16,6 +16,9 @@ namespace Sequel
         /// Opens the <see cref="IDbConnection"/> and returns it, meant to simplify <code>using (...) { ... }</code>
         /// constructs.
         /// </summary>
+        /// <typeparam name="T">
+        /// The type of the connection to open.
+        /// </typeparam>
         /// <param name="connection">
         /// The <see cref="IDbConnection"/> to open.
         /// </param>
@@ -34,8 +37,12 @@ namespace Sequel
         ///     }
         /// </code></example>
         [PublicAPI, NotNull]
-        public static IDbConnection OpenNow([NotNull] this IDbConnection connection)
+        public static T OpenNow<T>([NotNull] this T connection)
+            where T : IDbConnection
         {
+            if (connection == null)
+                throw new ArgumentNullException("connection");
+
             connection.Open();
             return connection;
         }
