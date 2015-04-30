@@ -223,6 +223,35 @@ namespace Sequel
             return new DbPreparedQueryAnonymousCommand<T>(connection, null, sql, parameters);
         }
 
+        /// <summary>
+        /// Queries the database for a list of rows and extracts the first column into a list of values.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of object to return for each value from the first column of each row in the result set.
+        /// </typeparam>
+        /// <param name="connection">
+        /// The <see cref="IDbConnection"/> on which to execute the SQL statement.
+        /// </param>
+        /// <param name="sql">
+        /// The SQL statement to execute.
+        /// </param>
+        /// <param name="parameters">
+        /// Optional parameters to the SQL statement. Leave <c>null</c> if there are no parameters.
+        /// </param>
+        /// <returns>
+        /// A <see cref="List{T}"/> of <typeparamref name="T"/> holding one object per row in the
+        /// result set from the database.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para><paramref name="connection"/> is <c>null</c>.</para>
+        /// <para>- or -</para>
+        /// <para><paramref name="sql"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <seealso cref="IDbCommand.ExecuteReader()"/>.
+        /// <example><code>
+        ///     IDbConnection connection = ...
+        ///     var result = connection.QuerySequence&lt;String&gt;("SELECT Key FROM some_table");
+        /// </code></example>
         [PublicAPI, NotNull, ItemCanBeNull]
         public static List<T> QuerySequence<T>([NotNull] this IDbConnection connection, [NotNull] string sql, [CanBeNull] object parameters = null)
         {
@@ -243,6 +272,42 @@ namespace Sequel
             return new DbPreparedQuerySequenceCommand<T>(connection, null, sql, parameters);
         }
 
+        /// <summary>
+        /// Queries the database for a row and extracts the first column as a single value.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of value to return for the first column of the row in the result set.
+        /// </typeparam>
+        /// <param name="connection">
+        /// The <see cref="IDbConnection"/> on which to execute the SQL statement.
+        /// </param>
+        /// <param name="sql">
+        /// The SQL statement to execute.
+        /// </param>
+        /// <param name="parameters">
+        /// Optional parameters to the SQL statement. Leave <c>null</c> if there are no parameters.
+        /// </param>
+        /// <returns>
+        /// A single value if a row was returned, or <c>default(T)</c> if no row was returned. Note that
+        /// if a row was returned, and the first column contains a <c>null</c> or <c>0</c> (depending on the type),
+        /// then the result will also be <c>default(T)</c> so it is not possible to determine if no row was
+        /// returned or if the value is actually the same as <c>default(T)</c> in the first column of that row.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para><paramref name="connection"/> is <c>null</c>.</para>
+        /// <para>- or -</para>
+        /// <para><paramref name="sql"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <seealso cref="IDbCommand.ExecuteReader()"/>.
+        /// <example><code>
+        ///     IDbConnection connection = ...
+        ///     var result = connection.QueryScalar&lt;int&gt;("SELECT COUNT(*) FROM some_table");
+        /// </code></example>
+        /// <remarks>
+        /// Note that <see cref="Query{T}(IDbConnection,string,object)"/> must be able to construct
+        /// new instances of <typeparamref name="T"/> so a parameterless public constructor is
+        /// required.
+        /// </remarks>
         [PublicAPI, CanBeNull]
         public static T QueryScalar<T>([NotNull] this IDbConnection connection, [NotNull] string sql, [CanBeNull] object parameters = null)
         {
