@@ -189,7 +189,7 @@ namespace Sequel
         /// <seealso cref="IDbCommand.ExecuteReader()"/>.
         /// <example><code>
         ///     IDbConnection connection = ...
-        ///     var result = connection.Query("SELECT Key, Value FROM some_table", new
+        ///     var result = connection.QueryAnonymous("SELECT Key, Value FROM some_table", new
         ///     {
         ///         Key = "dummy key",
         ///         Value = 0
