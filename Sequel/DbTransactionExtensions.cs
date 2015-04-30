@@ -91,8 +91,7 @@ namespace Sequel
         }
 
         [PublicAPI, CanBeNull]
-        public static T? QueryScalar<T>([NotNull] this IDbTransaction transaction, [NotNull] string sql, [CanBeNull] object parameters = null)
-            where T : struct
+        public static T QueryScalar<T>([NotNull] this IDbTransaction transaction, [NotNull] string sql, [CanBeNull] object parameters = null)
         {
             using (var command = transaction.PrepareForQueryScalar<T>(sql, parameters))
             {
@@ -101,35 +100,14 @@ namespace Sequel
         }
 
         [PublicAPI, NotNull]
-        public static IDbPreparedCommand<T?> PrepareForQueryScalar<T>([NotNull] this IDbTransaction transaction, [NotNull] string sql, [CanBeNull] object parameters = null)
-            where T : struct
+        public static IDbPreparedCommand<T> PrepareForQueryScalar<T>([NotNull] this IDbTransaction transaction, [NotNull] string sql, [CanBeNull] object parameters = null)
         {
             if (transaction == null)
                 throw new ArgumentNullException("transaction");
             if (sql == null)
                 throw new ArgumentNullException("sql");
 
-            return new DbPreparedQueryNullableScalar<T>(transaction.Connection, transaction, sql, parameters);
-        }
-
-        [PublicAPI, CanBeNull]
-        public static string QueryStringScalar([NotNull] this IDbTransaction transaction, [NotNull] string sql, [CanBeNull] object parameters = null)
-        {
-            using (var command = transaction.PrepareForQueryStringScalar(sql, parameters))
-            {
-                return command.Execute();
-            }
-        }
-
-        [PublicAPI, NotNull]
-        public static IDbPreparedCommand<string> PrepareForQueryStringScalar([NotNull] this IDbTransaction transaction, [NotNull] string sql, [CanBeNull] object parameters = null)
-        {
-            if (transaction == null)
-                throw new ArgumentNullException("transaction");
-            if (sql == null)
-                throw new ArgumentNullException("sql");
-
-            return new DbPreparedQueryStringScalar(transaction.Connection, transaction, sql, parameters);
+            return new DbPreparedQueryScalar<T>(transaction.Connection, transaction, sql, parameters);
         }
     }
 }
