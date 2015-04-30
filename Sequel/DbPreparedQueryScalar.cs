@@ -17,7 +17,7 @@ namespace Sequel
             var value = Command.ExecuteScalar();
             if (value is DBNull)
                 value = null;
-            return (T)value;
+            return (T)Convert.ChangeType(value, typeof(T));
         }
     }
 }

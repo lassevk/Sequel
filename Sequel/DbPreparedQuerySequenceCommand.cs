@@ -16,7 +16,7 @@ namespace Sequel
             var value = reader.GetValue(0);
             if (value is DBNull)
                 value = null;
-            return (T)value;
+            return (T) Convert.ChangeType(value, typeof(T));
         }
     }
 }
