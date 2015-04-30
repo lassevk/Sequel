@@ -36,21 +36,18 @@ See the example below for what this looks like.
 
 # Example of usage with SQLite
 
-    using (var connection = new SQLiteConnection(@"Data Source=D:\Temp\Test.sqlite3"))
+    using (var connection = new SQLiteConnection(@"Data Source=D:\Temp\Test.sqlite3").OpenNow())
+    using (var transaction = connection.BeginTransaction())
     {
-        connection.Open();
-        using (var transaction = connection.BeginTransaction())
-        {
-            transaction.Execute("delete from some_table where key = @key", new { key = 42 });
-            transaction.Execute("insert into some_table (key, value) values (@key, @value)", new {
-                key = "mol",
-                value = 42
-            });
-            var records = transaction.QueryAnonymous("select * from some_table", new { key = "dummy", value = 0 });
-            if (records.Any(r => r.value == 42))
-                Debug.WriteLine("SUCCESS!");
-            transaction.Commit();
-        }
+        transaction.Execute("delete from some_table where key = @key", new { key = 42 });
+        transaction.Execute("insert into some_table (key, value) values (@key, @value)", new {
+            key = "mol",
+            value = 42
+        });
+        var records = transaction.QueryAnonymous("select * from some_table", new { key = "dummy", value = 0 });
+        if (records.Any(r => r.value == 42))
+            Debug.WriteLine("SUCCESS!");
+        transaction.Commit();
     }
 
   [idbc]: https://msdn.microsoft.com/en-us/library/system.data.idbconnection%28v=vs.110%29.aspx
