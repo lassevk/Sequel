@@ -237,8 +237,7 @@ namespace Sequel
         }
 
         [PublicAPI, CanBeNull]
-        public static T? QueryScalar<T>([NotNull] this IDbConnection connection, [NotNull] string sql, [CanBeNull] object parameters = null)
-            where T : struct
+        public static T QueryScalar<T>([NotNull] this IDbConnection connection, [NotNull] string sql, [CanBeNull] object parameters = null)
         {
             using (var command = connection.PrepareForQueryScalar<T>(sql, parameters))
             {
@@ -247,35 +246,14 @@ namespace Sequel
         }
 
         [PublicAPI, NotNull]
-        public static IDbPreparedCommand<T?> PrepareForQueryScalar<T>([NotNull] this IDbConnection connection, [NotNull] string sql, [CanBeNull] object parameters = null)
-            where T : struct
+        public static IDbPreparedCommand<T> PrepareForQueryScalar<T>([NotNull] this IDbConnection connection, [NotNull] string sql, [CanBeNull] object parameters = null)
         {
             if (connection == null)
                 throw new ArgumentNullException("connection");
             if (sql == null)
                 throw new ArgumentNullException("sql");
 
-            return new DbPreparedQueryNullableScalar<T>(connection, null, sql, parameters);
-        }
-
-        [PublicAPI, CanBeNull]
-        public static string QueryStringScalar([NotNull] this IDbConnection connection, [NotNull] string sql, [CanBeNull] object parameters = null)
-        {
-            using (var command = connection.PrepareForQueryStringScalar(sql, parameters))
-            {
-                return command.Execute();
-            }
-        }
-
-        [PublicAPI, NotNull]
-        public static IDbPreparedCommand<string> PrepareForQueryStringScalar([NotNull] this IDbConnection connection, [NotNull] string sql, [CanBeNull] object parameters = null)
-        {
-            if (connection == null)
-                throw new ArgumentNullException("connection");
-            if (sql == null)
-                throw new ArgumentNullException("sql");
-
-            return new DbPreparedQueryStringScalar(connection, null, sql, parameters);
+            return new DbPreparedQueryScalar<T>(connection, null, sql, parameters);
         }
     }
 }

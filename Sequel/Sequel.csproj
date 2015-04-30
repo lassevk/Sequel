@@ -56,10 +56,8 @@
     <Compile Include="DbPreparedQueryAnonymousCommand.cs" />
     <Compile Include="DbPreparedQueryCommand.cs" />
     <Compile Include="DbPreparedQueryNonAnonymousCommand.cs" />
-    <Compile Include="DbPreparedQueryNullableScalar.cs" />
     <Compile Include="DbPreparedQueryScalar.cs" />
     <Compile Include="DbPreparedQuerySequenceCommand.cs" />
-    <Compile Include="DbPreparedQueryStringScalar.cs" />
     <Compile Include="DbTransactionExtensions.cs" />
     <Compile Include="IDbPreparedCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
