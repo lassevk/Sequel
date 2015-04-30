@@ -174,6 +174,11 @@ namespace Sequel
         /// <param name="sql">
         /// The SQL statement to execute.
         /// </param>
+        /// <param name="template">
+        /// A template object for creating anonymous objects. This parameter by itself is not used, but is
+        /// used the type inference of the C# compiler to infer what the type of <typeparamref name="T"/>
+        /// must be.
+        /// </param>
         /// <param name="parameters">
         /// Optional parameters to the SQL statement. Leave <c>null</c> if there are no parameters.
         /// </param>

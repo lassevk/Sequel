@@ -52,7 +52,7 @@ namespace Sequel
         public static List<T> QueryAnonymous<T>(this IDbTransaction transaction, string sql, [CanBeNull] T template = null, object parameters = null)
             where T : class
         {
-            using (var command = transaction.PrepareForQueryAnonymous<T>(sql, template, parameters))
+            using (var command = transaction.PrepareForQueryAnonymous(sql, template, parameters))
             {
                 return command.Execute();
             }
